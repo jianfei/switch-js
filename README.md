@@ -2,7 +2,6 @@ switch-js
 ===
 
 Install
-
 ---
 
 ```
@@ -10,7 +9,6 @@ npm i switch-js
 ```
 
 Example
-
 ---
 
 ```javascript
@@ -76,7 +74,7 @@ const valueInUppercase = switcher(valueToTest)
 // result: FOO
 ```
 
-Use 'caseMap', `casesMap`, `caseWhenMap` and `valueMap` to set the value by a map function:
+Use `caseMap`, `casesMap`, `caseWhenMap` and `valueMap` to set the value by a map function:
 
 ```javascript
 const valueInUppercase = switcher(valueToTest)
@@ -84,11 +82,10 @@ const valueInUppercase = switcher(valueToTest)
     .caseMap('bar', value => value + ' starts with b')
     .valueMap(value => value + ' has no match');
 
-// result: foo starts with f'
+// result: foo starts with f
 ```
 
 API
-
 ---
 
 - `switch(value)` start a switch chainning
