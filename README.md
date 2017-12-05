@@ -49,7 +49,7 @@ const valueInUppercase = switcher(valueToTest)
     .value('NO_MATCH');
 ```
 
-`casesTo` and `caseWhenTo` can used to set value similiarly
+`casesTo` and `caseWhenTo` can used to set value similiarly:
 
 ```javascript
 const valueInUppercase = switcher(valueToTest)
@@ -57,7 +57,7 @@ const valueInUppercase = switcher(valueToTest)
     .value('NO_MATCH');
 ```
 
-Use 'caseMap', `casesMap`, `caseWhenMap` and `valueMap` to set the value by a function
+Use 'caseMap', `casesMap`, `caseWhenMap` and `valueMap` to set the value by a map function:
 
 ```javascript
 const valueInUppercase = switcher(valueToTest)
@@ -107,7 +107,7 @@ API
     - `matcher` A function to check if `value` is a match
     - `valueToExport`
 
-- `value(defaultValue)`
+- `value(defaultValue)` Export the value
     - `defaultValue` Default value will be exported if provided and no match is found
 
 - `caseMap(caseValue, mapper)`
@@ -122,5 +122,5 @@ API
     - `matcher` A function to check if `value` is a match
     - `mapper` A function to map the value to a new one to export
 
-- `valueMap(mapper)`
+- `valueMap(mapper)` Export the value by a map function
     - `mapper` A function to map the value to a new one to export
