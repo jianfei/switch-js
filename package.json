@@ -1,6 +1,6 @@
 {
   "name": "switch-js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Use switch and case as chainable functions",
   "main": "dist/switch.min.js",
   "scripts": {
