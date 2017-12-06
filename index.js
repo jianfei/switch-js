@@ -1,4 +1,4 @@
-export default realValue => {
+module.exports = realValue => {
     let chain;
     let caseHandler;
     let map;
@@ -63,4 +63,4 @@ export default realValue => {
     }
 
     return chain;
-}
+};
