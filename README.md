@@ -36,109 +36,76 @@ switcher(valueToTest)
 // result: foo or bar!
 ```
 
-Check if match by a function:
+Check if value is matched by a function:
 
 ```javascript
 switcher(valueToTest)
     .caseWhen(value => typeof value === 'string', () => console.log('a string!'))
-    .default(() => console.log('not a string!'));
+    .caseWhen(value => typeof value === 'number', () => console.log('a number!'))
+    .default(() => console.log('other datatypes!'));
 
 // result: a string!
 ```
 
-Use switch to set value:
+Use `to` to set value:
 
 ```javascript
 const valueInUppercase = switcher(valueToTest)
-    .caseTo('foo', 'FOO')
-    .caseTo('bar', 'BAR')
-    .value('NO_MATCH');
+    .case('foo').to('FOO!')
+    .case('bar').to('BAR!')
+    .value('NO MATCH FOUND!');
 
-// result: FOO
+// result: FOO!
+
+// .value('NO MATCH FOUND!')
+// has the same effect as
+// .default().to('NO MATCH FOUND!').value()
 ```
 
-`casesTo` and `caseWhenTo` can used to set value in similiar way:
+Use `mapTo` to set the value by a function:
 
 ```javascript
 const valueInUppercase = switcher(valueToTest)
-    .casesTo(['foo', 'bar'], 'MATCH')
-    .value('NO_MATCH');
+    .cases(['foo', 'bar']).mapTo(value => value.toUpperCase())
+    .default().mapTo(value => value.toUpperCase() + ' IS NOT A MATCH!')
+    .value();
 
-// result: MATCH
-
-const valueInUppercase = switcher(valueToTest)
-    .caseWhenTo(value => value.startsWith('f'), 'FOO')
-    .caseWhenTo(value => value.startsWith('b'), 'BAR')
-    .value('NO_MATCH');
-
-// result: FOO
-```
-
-Use `caseMap`, `casesMap`, `caseWhenMap` and `valueMap` to set the value by a map function:
-
-```javascript
-const valueInUppercase = switcher(valueToTest)
-    .caseMap('foo', value => value + ' starts with f')
-    .caseMap('bar', value => value + ' starts with b')
-    .valueMap(value => value + ' has no match');
-
-// result: foo starts with f
+// result: 'FOO'
 ```
 
 API
 ---
 
-- `switch(value)` start a switch chainning
-    - `value` Value to check
+### `switch(value)` start a switch chain
+- `value` Value to check
 
-- `case(caseValue[, matchedCallback][, notMatchedCallback])` The case method you are familiar with
-    - `caseValue`
-    - `matchedCallback` Function, optional. Invoked if `caseValue` equals deeply to `value`
-    - `notMatchedCallback` Function, optional. Invoked otherwise
+### `case(caseValue[, matchedCallback][, notMatchedCallback])` The case method you know
+- `caseValue`
+- `matchedCallback` Function, optional. Invoked if `caseValue` equals deeply to `value`
+- `notMatchedCallback` Function, optional. Invoked otherwise
 
-- `cases(caseValues[, matchedCallback][, notMatchedCallback])` Check match for multiple case values
-    - `caseValues` Array of `caseValue`
-    - `matchedCallback` Function, optional. Invoked if `caseValues` includes `value`
-    - `notMatchedCallback` Function, optional. Invoked otherwise
+### `cases(caseValues[, matchedCallback][, notMatchedCallback])` Check for multiple case values
+- `caseValues` Array of `caseValue`
+- `matchedCallback` Function, optional. Invoked if `caseValues` includes `value`
+- `notMatchedCallback` Function, optional. Invoked otherwise
 
-- `caseWhen(matcher[, matchedCallback][, notMatchedCallback])` Check match by a function
-    - `matcher` A match function used to check if `value` is a match
-    - `matchedCallback` Function, optional. Invoked if `matcher(value)` returns a truthy value
-    - `notMatchedCallback` Function, optional. Invoked otherwise
+### `caseWhen(matcher[, matchedCallback][, notMatchedCallback])` Check by a function
+- `matcher` A match function used to check if `value` is a match
+- `matchedCallback` Function, optional. Invoked if `matcher(value)` returns a truthy value
+- `notMatchedCallback` Function, optional. Invoked otherwise
 
-- `default([noMatchFoundCallback, matchFoundCallback])` The default method you are familiar with
-    - `noMatchFoundCallback` Function, optional. Invoked if no match is found
-    - `matchFoundCallback` Function, optional. Invoked otherwise
+### `default([noMatchFoundCallback, matchFoundCallback])` The default method you know
+- `noMatchFoundCallback` Function, optional. Invoked if no match is found
+- `matchFoundCallback` Function, optional. Invoked otherwise
 
-- `always(callback)` Invoked anyway
-    - `callback` Function
+### `always(callback)` Invoked anyway
+- `callback` Function
 
-- `caseTo(caseValue, valueToExport)`
-    - `caseValue`
-    - `valueToExport` The value you want to set if match
+### `to(valueToReturn)` Set a new value to return by `value()` if previous case is a match or it follows `default()`
+- `valueToReturn`
 
-- `casesTo(caseValues, valueToExport)`
-    - `caseValues` Array of `caseValue`
-    - `valueToExport` The value you want to set if match
+### `mapTo(mapper)` Similiar to `to()` but set value by a mapper function
+- `mapper` Function | String. If a string is passed, it will take as a path and invoke `_.get(valueToTest, path)` from lodash
 
-- `caseWhenTo(matcher, valueToExport)`
-    - `matcher` A function to check if `value` is a match
-    - `valueToExport` The value you want to set if match
-
-- `value(defaultValue)` Export the value
-    - `defaultValue` Default value will be set if no match is found
-
-- `caseMap(caseValue, mapper)`
-    - `caseValue`
-    - `mapper` A function to map the value to a new one to set
-
-- `casesMap(caseValues, mapper)`
-    - `caseValues` Array of `caseValue`
-    - `mapper` A function to map the value to a new one to set
-
-- `caseWhenMap(matcher, mapper)`
-    - `matcher` A function to check if `value` is a match
-    - `mapper` A function to map the value to a new one to set
-
-- `valueMap(mapper)` Export the value by a map function
-    - `mapper` A function to map the value to a new one to set
+### `value(defaultValue)` Return the value
+- `defaultValue` Default value will return if no match is found

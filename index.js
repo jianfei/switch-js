@@ -1,94 +1,65 @@
 export default realValue => {
     let chain;
-    let callbackInvoker;
+    let caseHandler;
     let map;
-    let toValue;
-    let isMatchFound = false;
+    let returnValue;
+    let isLastCaseMatched = false;
+    let hasMatch = false;
 
-    callbackInvoker = (isMatch, matchCallback, noMatchCallback) => {
-        if (!isMatchFound && isMatch) {
-            isMatchFound = true;
-            matchCallback && matchCallback(realValue, isMatch);
+    caseHandler = (isMatched, matchedCallback, notMatchedCallback) => {
+        isLastCaseMatched = false;
+
+        if (!hasMatch && isMatched) {
+            isLastCaseMatched = true;
+            hasMatch = true;
+            matchedCallback && matchCallback(realValue, isMatched);
         }
         else {
-            noMatchCallback && noMatchCallback(realValue, isMatch);
+            notMatchedCallback && notMatchedCallback(realValue, isMatched);
         }
 
         return chain;
     },
 
-    map = mapper => _.isFunction(mapper) ? mapper(realValue) : _.get(realValue, mapper);
-
     chain = {
-        case: (caseValue, ...args) => callbackInvoker(_.isEqual(caseValue, realValue), ...args),
+        case: (caseValue, ...args) => caseHandler(_.isEqual(caseValue, realValue), ...args),
 
-        cases: (caseValues, ...args) => callbackInvoker(_.includes(caseValues, realValue), ...args),
+        cases: (caseValues, ...args) => caseHandler(_.includes(caseValues, realValue), ...args),
 
-        caseWhen: (matcher, ...args) => callbackInvoker(matcher(realValue), ...args),
+        caseWhen: (matcher, ...args) => caseHandler(matcher(realValue), ...args),
 
-        default: (noFoundCallback, foundCallback) => {
-            const callback = isMatchFound ? foundCallback : noFoundCallback;
+        default: (noMatchFoundCallback, matchFoundCallback) => {
+            const callback = hasMatch ? matchFoundCallback : noMatchFoundCallback;
 
-            callback && callback(realValue, isMatchFound);
+            callback && callback(realValue, hasMatch);
+            isLastCaseMatched = true;
 
             return chain;
         },
 
         always: callback => {
-            callback(realValue, isMatchFound);
+            callback(realValue, hasMatch);
 
             return chain;
         },
 
-        caseTo: (caseValue, newValue) => {
-            if (_.isUndefined(toValue) && _.isEqual(caseValue, realValue)) {
-                toValue = newValue;
+        to: toValue => {
+            if (_.isUndefined(returnValue) && isLastCaseMatched) {
+                returnValue = toValue;
             }
 
             return chain;
         },
 
-        casesTo: (caseValues, newValue) => {
-            if (_.isUndefined(toValue) && _.includes(caseValues, realValue)) {
-                toValue = newValue;
+        mapTo: mapper => {
+            if (_.isUndefined(returnValue) && isLastCaseMatched) {
+                returnValue = _.isFunction(mapper) ? mapper(realValue) : _.get(realValue, mapper);
             }
 
             return chain;
         },
 
-        caseWhenTo: (matcher, newValue) => {
-            if (_.isUndefined(toValue) && matcher(realValue)) {
-                toValue = newValue;
-            }
-
-            return chain;
-        },
-
-        value: defaultValue => toValue || defaultValue,
-
-        caseMap: (caseValue, mapper) => {
-            if (_.isUndefined(toValue) && _.isEqual(caseValue, realValue)) {
-                toValue = map(mapper);
-            }
-
-            return chain;
-        },
-
-        casesMap: (caseValues, mapper) => {
-            if (_.isUndefined(toValue) && _.includes(caseValues, realValue)) {
-                toValue = map(mapper);
-            }
-        },
-
-        caseWhenMap: (matcher, mapper) => {
-            if (_.isUndefined(toValue) && matcher(realValue)) {
-                toValue = map(mapper);
-            }
-
-            return chain;
-        },
-
-        valueMap: mappper => toValue || map(mapper),
+        value: defaultValue => returnValue || defaultValue,
     }
 
     return chain;
