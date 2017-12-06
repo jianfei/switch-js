@@ -76,36 +76,54 @@ const valueInUppercase = switcher(valueToTest)
 API
 ---
 
-### `switch(value)` start a switch chain
+### `switch(value)`
+
+start a switch chain
 - `value` Value to check
 
-### `case(caseValue[, matchedCallback][, notMatchedCallback])` The case method you know
+### `case(caseValue[, matchedCallback][, notMatchedCallback])`
+
+The case method you know
 - `caseValue`
 - `matchedCallback` Function, optional. Invoked if `caseValue` equals deeply to `value`
 - `notMatchedCallback` Function, optional. Invoked otherwise
 
-### `cases(caseValues[, matchedCallback][, notMatchedCallback])` Check for multiple case values
+### `cases(caseValues[, matchedCallback][, notMatchedCallback])`
+
+Check for multiple case values
 - `caseValues` Array of `caseValue`
 - `matchedCallback` Function, optional. Invoked if `caseValues` includes `value`
 - `notMatchedCallback` Function, optional. Invoked otherwise
 
-### `caseWhen(matcher[, matchedCallback][, notMatchedCallback])` Check by a function
+### `caseWhen(matcher[, matchedCallback][, notMatchedCallback])`
+
+Check by a function
 - `matcher` A match function used to check if `value` is a match
 - `matchedCallback` Function, optional. Invoked if `matcher(value)` returns a truthy value
 - `notMatchedCallback` Function, optional. Invoked otherwise
 
-### `default([noMatchFoundCallback, matchFoundCallback])` The default method you know
+### `default([noMatchFoundCallback, matchFoundCallback])`
+
+The default method you know
 - `noMatchFoundCallback` Function, optional. Invoked if no match is found
 - `matchFoundCallback` Function, optional. Invoked otherwise
 
-### `always(callback)` Invoked anyway
+### `always(callback)`
+
+Invoked anyway
 - `callback` Function
 
-### `to(valueToReturn)` Set a new value to return by `value()` if previous case is a match or it follows `default()`
+### `to(valueToReturn)`
+
+Set a new value to return by `value()` if previous case is a match or it follows `default()`
 - `valueToReturn`
 
-### `mapTo(mapper)` Similiar to `to()` but set value by a mapper function
+### `mapTo(mapper)`
+
+Similiar to `to()` but set value by a mapper function
 - `mapper` Function | String. If a string is passed, it will take as a path and invoke `_.get(valueToTest, path)` from lodash
 
-### `value(defaultValue)` Return the value
+### `value(defaultValue)`
+
+Return the value
 - `defaultValue` Default value will return if no match is found
