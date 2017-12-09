@@ -1,16 +1,14 @@
 switch-js
 ===
 
-[中文文档](./ZH.md)
-
-Install
+安装
 ---
 
 ```
 npm i switch-js
 ```
 
-Example
+示例
 ---
 
 ```javascript
@@ -23,22 +21,22 @@ switcher(valueToTest)
     .default(() => console.log('no match found in given cases!'))
     .always(() => console.log('this is cool!'));
 
-// result:
+// 输出:
 // foo!
 // this is cool!
 ```
 
-Check for multiple cases:
+一次检查多个值：
 
 ```javascript
 switcher(valueToTest)
     .cases(['foo', 'bar'], () => console.log('foo or bar!'))
     .default(() => console.log('no match found in given cases!'));
 
-// result: foo or bar!
+// 输出: foo or bar!
 ```
 
-Check if value is matched by a function:
+使用函数来检查值是否匹配：
 
 ```javascript
 switcher(valueToTest)
@@ -46,10 +44,10 @@ switcher(valueToTest)
     .caseWhen(value => typeof value === 'number', () => console.log('a number!'))
     .default(() => console.log('other datatypes!'));
 
-// result: a string!
+// 输出: a string!
 ```
 
-Use `to` to set value:
+使用 `to` 来根据匹配情况赋值：
 
 ```javascript
 const valueInUppercase = switcher(valueToTest)
@@ -57,14 +55,14 @@ const valueInUppercase = switcher(valueToTest)
     .case('bar').to('BAR!')
     .value('NO MATCH FOUND!');
 
-// result: FOO!
+// 输出: FOO!
 
 // .value('NO MATCH FOUND!')
-// has the same effect as
+// 也可以使用下面的语法
 // .default().to('NO MATCH FOUND!').value()
 ```
 
-Use `mapTo` to set the value by a function:
+使用 `mapTo` 通过函数改变原始值
 
 ```javascript
 const valueInUppercase = switcher(valueToTest)
@@ -72,7 +70,7 @@ const valueInUppercase = switcher(valueToTest)
     .default().mapTo(value => value.toUpperCase() + ' IS NOT A MATCH!')
     .value();
 
-// result: 'FOO'
+// 输出: 'FOO'
 ```
 
 API
@@ -80,52 +78,52 @@ API
 
 ### `switch(value)`
 
-start a switch chain
-- `value` Value to check
+开始一个 switch 链
+- `value` 需要检查的值
 
 ### `case(caseValue[, matchedCallback][, notMatchedCallback])`
 
-The case method you know
-- `caseValue`
-- `matchedCallback` Function, optional. Invoked if `caseValue` equals deeply to `value`
-- `notMatchedCallback` Function, optional. Invoked otherwise
+你懂的
+- `caseValue` 匹配值
+- `matchedCallback` Function，可选。如果匹配则执行。
+- `notMatchedCallback` Function，可选。如果不匹配则执行。
 
 ### `cases(caseValues[, matchedCallback][, notMatchedCallback])`
 
-Check for multiple case values
-- `caseValues` Array of `caseValue`
-- `matchedCallback` Function, optional. Invoked if `caseValues` includes `value`
-- `notMatchedCallback` Function, optional. Invoked otherwise
+一次检查多个值
+- `caseValues` 包含所有匹配值的数组，如果检查值包括在内，则视为匹配。
+- `matchedCallback` Function，可选。如果匹配则执行。
+- `notMatchedCallback` Function，可选。如果不匹配则执行。
 
 ### `caseWhen(matcher[, matchedCallback][, notMatchedCallback])`
 
-Check by a function
-- `matcher` A match function used to check if `value` is a match
-- `matchedCallback` Function, optional. Invoked if `matcher(value)` returns a truthy value
-- `notMatchedCallback` Function, optional. Invoked otherwise
+使用函数来检查是否匹配
+- `matcher` 一个检查函数，如果返回真值则视为匹配。
+- `matchedCallback` Function，可选。如果匹配则执行。
+- `notMatchedCallback` Function，可选。如果不匹配则执行。
 
 ### `default([noMatchFoundCallback, matchFoundCallback])`
 
-The default method you know
-- `noMatchFoundCallback` Function, optional. Invoked if no match is found
-- `matchFoundCallback` Function, optional. Invoked otherwise
+你懂的
+- `noMatchFoundCallback` Function，可选。如果没任何匹配则执行。
+- `matchFoundCallback` Function，可选。如果找到了匹配则执行。
 
 ### `always(callback)`
 
-Invoked anyway
+无论如何都会执行
 - `callback` Function
 
 ### `to(valueToReturn)`
 
-Set a new value to return by `value()` if previous case is a match or it follows `default()`
+跟在 `case` 方法后面，如果前面匹配成功，则将返回值设为传入的值。
 - `valueToReturn`
 
 ### `mapTo(mapper)`
 
-Similiar to `to()` but set value by a mapper function
-- `mapper` Function | String. If a string is passed, it will take as a path and invoke `_.get(valueToTest, path)` from lodash
+跟 `to` 方法类似，但通过一个方法来改变原始值，并输出到返回值。
+- `mapper` Function | String. 如果传入的是字符串，则视为路径并调用 `_.get(valueToTest, path)` 方法来获得值。
 
 ### `value(defaultValue)`
 
-Return the value
-- `defaultValue` Default value will return if no match is found
+输出返回值。
+- `defaultValue` 如果没有任何匹配，则返回默认值。
