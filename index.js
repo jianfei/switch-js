@@ -12,7 +12,7 @@ module.exports = realValue => {
         if (!hasMatch && isMatched) {
             isLastCaseMatched = true;
             hasMatch = true;
-            matchedCallback && matchCallback(realValue, isMatched);
+            matchedCallback && matchedCallback(realValue, isMatched);
         }
         else {
             notMatchedCallback && notMatchedCallback(realValue, isMatched);
@@ -39,6 +39,14 @@ module.exports = realValue => {
 
         always: callback => {
             callback(realValue, hasMatch);
+
+            return chain;
+        },
+
+        do: callback => {
+            if (isLastCaseMatched) {
+                callback(realValue, hasMatch);
+            }
 
             return chain;
         },
