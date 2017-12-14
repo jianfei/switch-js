@@ -51,6 +51,14 @@ module.exports = realValue => {
             return chain;
         },
 
+        otherwise: callback => {
+            if (!isLastCaseMatched) {
+                callback(realValue, hasMatch);
+            }
+
+            return chain;
+        },
+
         to: toValue => {
             if (_.isUndefined(returnValue) && isLastCaseMatched) {
                 returnValue = toValue;
