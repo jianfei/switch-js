@@ -1,6 +1,6 @@
 {
   "name": "switch-js",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Use switch and case as chainable functions",
   "main": "dist/switch.min.js",
   "scripts": {
@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1"
+    "babel-preset-es2015": "^6.24.1",
+    "lodash": "^4.17.4"
   }
 }

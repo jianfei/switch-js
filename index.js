@@ -1,3 +1,6 @@
+import _get from 'lodash/get';
+import _isEqual from 'lodash/isEqual';
+
 module.exports = realValue => {
     let chain;
     let caseHandler;
@@ -22,9 +25,9 @@ module.exports = realValue => {
     },
 
     chain = {
-        case: (caseValue, ...args) => caseHandler(_.isEqual(caseValue, realValue), ...args),
+        case: (caseValue, ...args) => caseHandler(_isEqual(caseValue, realValue), ...args),
 
-        cases: (caseValues, ...args) => caseHandler(_.includes(caseValues, realValue), ...args),
+        cases: (caseValues, ...args) => caseHandler(caseValues.includes(realValue), ...args),
 
         caseWhen: (matcher, ...args) => caseHandler(matcher(realValue), ...args),
 
@@ -60,7 +63,7 @@ module.exports = realValue => {
         },
 
         to: toValue => {
-            if (_.isUndefined(returnValue) && isLastCaseMatched) {
+            if (returnValue === undefined && isLastCaseMatched) {
                 returnValue = toValue;
             }
 
@@ -68,8 +71,8 @@ module.exports = realValue => {
         },
 
         mapTo: mapper => {
-            if (_.isUndefined(returnValue) && isLastCaseMatched) {
-                returnValue = _.isFunction(mapper) ? mapper(realValue) : _.get(realValue, mapper);
+            if (returnValue === undefined && isLastCaseMatched) {
+                returnValue = typeof mapper === 'function' ? mapper(realValue) : _get(realValue, mapper);
             }
 
             return chain;
